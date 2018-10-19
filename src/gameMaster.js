@@ -1,14 +1,15 @@
 function GameMaster() {
   this.snake = new Snake()
   this.food = new Food()
+  this.blockedMovement = false
 
   this.update = function() {
-    this.food.show()
     this.snake.update()
 
     if(this.didHitWalls() || this.didHitSnake()) {
       this.snake = new Snake()
       this.food = new Food()
+      this.blockedMovement = false
 
       return false
     }
@@ -19,6 +20,8 @@ function GameMaster() {
     }
 
     this.snake.show()
+    this.food.show()
+    this.blockedMovement = false
   }
 
   this.didHitSnake = function() {
@@ -33,8 +36,8 @@ function GameMaster() {
 
   this.didHitWalls = function() {
     if(this.snake.x < 0 || this.snake.y < 0 ||
-      this.snake.x > windowWidth ||
-      this.snake.y > windowHeight ) {
+      this.snake.x + rectangleSize > windowWidth ||
+      this.snake.y + rectangleSize > windowHeight ) {
 
       return true
     }
@@ -42,18 +45,22 @@ function GameMaster() {
   }
 
   this.keyPressed = function(keyCode) {
+    if (this.blockedMovement) {
+      return false
+    }
+    this.blockedMovement = true
     switch(keyCode.key) {
       case 'ArrowUp':
-        this.snake.moveUp()
+        this.snake.moveUp ()
         break
       case 'ArrowDown':
-        this.snake.moveDown()
+        this.snake.moveDown ()
         break
       case 'ArrowLeft':
-        this.snake.moveLeft()
+        this.snake.moveLeft ()
         break
       case 'ArrowRight':
-        this.snake.moveRight()
+        this.snake.moveRight ()
         break
     }
   }
